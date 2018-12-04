@@ -171,7 +171,6 @@ func (srv *PBServer) Start(command interface{}) (
 
 	// Your code here
 	srv.log = append(srv.log, command)
-	prepareReplyChan := make(chan *PrepareReply, len(srv.peers))
 
 	primaryIndex := len(srv.log) - 1
 	prepArgs := &PrepareArgs{
@@ -180,7 +179,17 @@ func (srv *PBServer) Start(command interface{}) (
 		Index:         primaryIndex,
 		Entry:         command,
 	}
+
+	go replicateCommand(srv, prepArgs)
+
+	return primaryIndex, srv.currentView, true
+
+}
+
+func replicateCommand(srv *PBServer, prepArgs *PrepareArgs) chan bool {
 	fmt.Println("i am ran")
+	done := make(chan bool)
+	prepareReplyChan := make(chan *PrepareReply, len(srv.peers))
 	var wg sync.WaitGroup
 	wg.Add(len(srv.peers))
 
@@ -214,11 +223,12 @@ func (srv *PBServer) Start(command interface{}) (
 
 	if successReplies == majority {
 
-		srv.commitIndex = primaryIndex
-		return primaryIndex, srv.currentView, true
+		srv.commitIndex = prepArgs.Index
+		fmt.Println("committed index:", srv.commitIndex)
+		done <- true
 	}
+	return done
 
-	return primaryIndex, srv.currentView, true
 }
 
 // exmple code to send an AppendEntries RPC to a server.

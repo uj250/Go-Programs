@@ -8,7 +8,7 @@ package simplepb
 // test with the original before submitting.
 //
 
-import "labrpc"
+import "Go-Programs/labrpc"
 import "sync"
 import "testing"
 import "runtime"

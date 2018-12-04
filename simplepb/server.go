@@ -7,7 +7,8 @@ package simplepb
 //
 
 import (
-	"labrpc"
+	"Go-Programs/labrpc"
+	"fmt"
 	"sync"
 )
 
@@ -179,7 +180,7 @@ func (srv *PBServer) Start(command interface{}) (
 		Index:         primaryIndex,
 		Entry:         command,
 	}
-
+	fmt.Println("i am ran")
 	var wg sync.WaitGroup
 	wg.Add(len(srv.peers))
 

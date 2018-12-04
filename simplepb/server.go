@@ -7,7 +7,7 @@ package simplepb
 //
 
 import (
-	"labrpc"
+	"Go-Programs/labrpc"
 	"sync"
 )
 

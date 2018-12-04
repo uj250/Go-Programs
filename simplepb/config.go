@@ -8,7 +8,7 @@ package simplepb
 // test with the original before submitting.
 //
 
-import "labrpc"
+import "Go-Programs/labrpc"
 import "sync"
 import "testing"
 import "runtime"
@@ -263,6 +263,7 @@ func (cfg *config) replicateOne(server int, cmd int, expectedServers int) (
 			}
 			if nReplicated >= expectedServers {
 				return index
+				// fmt.Println("index returned:", index)
 			}
 		}
 		time.Sleep(80 * time.Millisecond)
